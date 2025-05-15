@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  scheduler:
+    restart: always
+    networks:
+      - lawly_db
+    build:
+      dockerfile: ../Dockerfile
+      context: app/
+    env_file:
+      - .env
+
+
+networks:
+  lawly_db:
+    external: true
+
