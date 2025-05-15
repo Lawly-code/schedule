@@ -57,7 +57,7 @@ class S3LinkUpdaterTask(BaseTask):
                         updated_count: int = 0
                         for template in templates:
                             try:
-                                if await self._update_template_urls(session, template, s3, http_session):
+                                if await self._update_template_urls(template, s3, http_session):
                                     updated_count += 1
                             except Exception as e:
                                 self.logger.error(f"Error updating template {template.id}: {str(e)}")
@@ -69,8 +69,7 @@ class S3LinkUpdaterTask(BaseTask):
             self.logger.exception(f"Error in S3 link update task: {str(e)}")
     
     async def _update_template_urls(
-        self, 
-        session: AsyncSession, 
+        self,
         template: Template, 
         s3: Any, 
         http_session: aiohttp.ClientSession
@@ -79,7 +78,7 @@ class S3LinkUpdaterTask(BaseTask):
         updated: bool = False
         
         # Обновление download_url, если он существует
-        if template.download_url and "http" in template.image_url:
+        if template.download_url:
             try:
                 # Сохраняем старый путь для последующего удаления
                 old_path = self._extract_path_from_url(template.download_url)
@@ -98,7 +97,7 @@ class S3LinkUpdaterTask(BaseTask):
                 self.logger.error(f"Failed to update download_url for template {template.id}: {str(e)}")
         
         # Обновление image_url, если он существует
-        if template.image_url and "http" in template.image_url:
+        if template.image_url:
             try:
                 # Сохраняем старый путь для последующего удаления
                 old_path = self._extract_path_from_url(template.image_url)
