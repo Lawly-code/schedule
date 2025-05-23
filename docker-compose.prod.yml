@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  scheduler_prod:
+    restart: always
+    networks:
+      - lawly_prod_db
+    build:
+      dockerfile: ../Dockerfile
+      context: app/
+    env_file:
+      - .env
+
+
+networks:
+  lawly_prod_db:
+    external: true
+
